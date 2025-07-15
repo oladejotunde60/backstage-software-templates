@@ -1,0 +1,86 @@
+docker run --rm -e AUTH_GITHUB_CLIENT_ID=Ov23ct1Fuoj58mPYJ7Io -e AUTH_GITHUB_CLIENT_SECRET=6bdc00891af5d408c3817d934a761232d20a6b66 -e GITHUB_TOKEN=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 -p 3000:3000 -p 7007:7007 -ti -v /home/tootechy/backstage-app:/app -w /app node:18-bookworm-slim bash
+npx @backstage/create-app@latest 
+docker exec -it f29da60d90a6 bash
+yarn --cwd packages/backend add @backstage/plugin-auth-backend-module-github-provider
+backend - packages/backend/src/index.ts 
+frontend - packages/app/src/App.tsx
+
+github secret: 6bdc00891af5d408c3817d934a761232d20a6b66
+github client id: Ov23ct1Fuoj58mPYJ7Io`
+github_token: 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
+cd packages/app
+yarn start --host 0.0.0.0
+export HOST=0.0.0.0
+yarn start
+root@27222d2e3b2b:/app/backstage/packages/app#
+apk update
+apk add curl
+curl localhost:3000
+
+
+
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        ## uncomment if using GitHub Enterprise
+        # enterpriseInstanceUrl: ${AUTH_GITHUB_ENTERPRISE_INSTANCE_URL}
+        ## uncomment to set lifespan of user session
+        # sessionDuration: { hours: 24 } # supports `ms` library format (e.g. '24h', '2 days'), ISO duration, "human duration" as used in code
+        signIn:
+          resolvers:
+            # See https://backstage.io/docs/auth/github/provider#resolvers for more resolvers
+            - resolver: usernameMatchingUserEntityName
+
+
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: breanna.davison
+spec:
+  profile:
+    # Intentional no displayName for testing
+    email: breanna-davison@example.com
+    picture: https://api.dicebear.com/7.x/avataaars/svg?seed=Luna&backgroundColor=transparent
+  memberOf: [team-a]
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location]
+  locations:
+    # Local example data, file locations are relative to the backend process, typically `packages/backend`
+    - type: file
+      target: ../../examples/entities.yaml
+
+
+
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: development-team
+  description: Team A
+spec:
+  type: team
+  profile:
+    # Intentional no displayName for testing
+    email: team-a@example.com
+    picture: https://api.dicebear.com/7.x/identicon/svg?seed=Fluffy&backgroundType=solid,gradientLinear&backgroundColor=ffd5dc,b6e3f4
+  parent: backstage
+  children: []
+
+  apt-get update && apt-get install -y python3 python3-pip python3-venv
+  export VIRTUAL_ENV=/opt/venv 
+  python3 -m venv $VIRTUAL_ENV
+  
+export PATH="$VIRTUAL_ENV/bin:$PATH"
+
+pip3 install mkdocs-techdocs-core
+
+yarn --cwd packages/backend add @backstage/plugin-scaffolder-backend-module-github

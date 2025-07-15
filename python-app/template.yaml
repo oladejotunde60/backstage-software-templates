@@ -37,6 +37,10 @@ spec:
           app_name: ${{parameters.component_id}}
           app_env: ${{parameters.environment}}
 
+    - id: build and push
+      action: docker:build
+
+
     - id: publish
       name: Publish
       action: publish:github
@@ -44,7 +48,7 @@ spec:
         # allowedHosts:
         #  - github.com
         description: This is ${{ parameters.component_id }}
-        repoUrl: github.com?owner=oladejotunde60&repo=${{parameters.component_id}}
+        repoUrl: github.com?owner=too-techy&repo=${{parameters.component_id}}
         protectDefaultBranch: false
         repoVisibility: public
 
@@ -52,9 +56,7 @@ spec:
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
-
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}i
   output:
     links:
       - title: Repository
